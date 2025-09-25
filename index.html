@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Sonam</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(120deg,#0f172a,#1e293b);font-family:sans-serif;overflow:hidden;color:white;}
+    .container{position:relative;width:90%;max-width:800px;background:rgba(0,0,0,0.2);padding:30px;border-radius:20px;text-align:center;overflow:hidden;}
+    canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;}
+    h1,h2,h3,p{position:relative;z-index:2;margin:10px 0;}
+    .typewriter{border-right:3px solid rgba(255,255,255,0.7);display:inline-block;padding-right:5px;}
+    .hearts{position:absolute;z-index:1;}
+    button{margin:10px;padding:8px 15px;border:none;border-radius:10px;background:rgba(255,255,255,0.2);color:white;cursor:pointer;position:relative;z-index:2;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="confetti"></canvas>
+    <h2 id="timeText">12:00 AM</h2>
+    <h1 id="happyText">HAPPY BIRTHDAY</h1>
+    <h1 id="nameText"><span class="typewriter" id="typewriter"></span></h1>
+    <p id="nicks">Chirkut • Pagal • Princess • Chuhiya • Bhalu</p>
+    <h2 id="finalText">I love you ❤</h2>
+    <div class="controls">
+      <button id="playBtn">Play Music</button>
+      <button id="fullBtn">Full Screen</button>
+    </div>
+  </div>
+
+  <script>
+    // Typewriter effect
+    const name = "Sonam";
+    const typeEl = document.getElementById('typewriter');
+    let idx=0;
+    function typeNext(){
+      if(idx<=name.length){
+        typeEl.textContent=name.slice(0,idx);
+        idx++;
+        setTimeout(typeNext,120);
+      } else { typeEl.style.borderRight='none'; }
+    }
+
+    // Show sequence
+    setTimeout(()=>document.getElementById('timeText').style.opacity=1,200);
+    setTimeout(()=>document.getElementById('happyText').style.opacity=1,900);
+    setTimeout(()=>{document.getElementById('nameText').style.opacity=1; typeNext();},1400);
+    setTimeout(()=>document.getElementById('nicks').style.opacity=1,2400);
+    setTimeout(()=>document.getElementById('finalText').style.opacity=1,3200);
+
+    // Confetti
+    const canvas=document.getElementById('confetti');
+    const ctx=canvas.getContext('2d');
+    let W=canvas.width=canvas.offsetWidth;
+    let H=canvas.height=canvas.offsetHeight;
+    window.addEventListener('resize',()=>{ W=canvas.width=canvas.offsetWidth; H=canvas.height=canvas.offsetHeight; });
+    function rand(min,max){return Math.random()*(max-min)+min;}
+    const pieces=[];
+    const colors=['#ff5c8a','#ffd166','#4ad9ff','#b388ff','#7ef4b1','#ff8ba7'];
+    for(let i=0;i<80;i++){pieces.push({x:rand(0,W),y:rand(-H,0),r:rand(6,12),c:colors[i%colors.length],vx:rand(-0.6,0.6),vy:rand(1,3)})}
+    function update(){
+      ctx.clearRect(0,0,W,H);
+      pieces.forEach(p=>{
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.y>H+20){p.y=rand(-100,-10);p.x=rand(0,W);}
+        ctx.fillStyle=p.c;
+        ctx.fillRect(p.x,p.y,p.r,p.r*1.6);
+      });
+      requestAnimationFrame(update);
+    }
+    update();
+  </script>
+</body>
+</html>
